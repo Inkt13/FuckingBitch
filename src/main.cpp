@@ -1,14 +1,12 @@
 #include <Arduino.h>
 #include <ftb.h>
+#include <Motor.h>
 
 void setup() {
     initPCA9685();
+    Serial.begin(1152000);
 }
 
 void loop() {
-    motorA(-20);
-    motorB(-20);
-    motorC(-20);
-    motorD(-20);
-    delay(2000);
+    motor.moveY(100);
 }
