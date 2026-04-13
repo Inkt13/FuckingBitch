@@ -14,7 +14,7 @@ class Motor
         void forward();
         void backward();
         void setSpeed(int speed);
-        // void move(int distance);
+        void move(int speed);
         void stop();
 };
     

@@ -30,24 +30,23 @@ void Motor::stop()
     setPWM(enablePin,0,0);
 }
 
-//This function is a work in progress........
-// void Motor::move(int speed)
-// {
-//
-//     if(speed > 0)
-//     {
-//         this->forward(speed);
-//     }
-//     else if(speed < 0)
-//     {
-//         const int opposite_dir = -1;
-//         this->backward(speed * opposite_dir);
-//     }
-//     else
-//     {
-//         stop();
-//     }
-// }
+void Motor::move(int speed)
+{
+
+    if(speed > 0)
+    {
+        this->forward();
+    }
+    else if(speed < 0)
+    {
+        const int opposite_dir = -1;
+        this->backward();
+    }
+    else
+    {
+        stop();
+    }
+}
 
 int time(int distance, int speed)
 {
