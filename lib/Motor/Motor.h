@@ -20,11 +20,11 @@ class Motor
     
 class RobotMovement
 {
-    Motor motorA;
-    Motor motorB;
-    Motor motorC;
-    Motor motorD;
     public:
+        Motor motorA;
+        Motor motorB;
+        Motor motorC;
+        Motor motorD;
         RobotMovement()
         {
             motorA = Motor(9, 10, 8, 50);
@@ -32,8 +32,8 @@ class RobotMovement
             motorC = Motor(6, 5, 7, 50);
             motorD = Motor(3, 4, 2, 50);
         }
+        void motorsInit();
         int speed = 100;
-
         void moveX(int speed);
         void moveY(int speed);
         void moveDiagonal13(int speed);
@@ -55,3 +55,4 @@ void motorD(int speed);
 int time(int distance, RobotMovement& speed);
 
 extern RobotMovement robotMovement;
+extern Motor *motor1234[4];
