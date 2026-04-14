@@ -24,7 +24,7 @@ namespace SerialDecoder {
     enum class motorOpcode : uint8_t
     {
         setTargetSpeed = 0x00,
-        setRampTime = 0x01,
+        setrampTime_ms = 0x01,
         startMove = 0x02,
     };
 

@@ -32,9 +32,9 @@ void Motor::startMove(unsigned int duration_s)
     this->isMoving = true;
 }
 
-void Motor::setRampTime(unsigned int ramp_s)
+void Motor::setrampTime_ms(unsigned int ramp_s)
 {
-    this->rampTime = ramp_s * 1000UL; // seconds → ms
+    this->rampTime_ms = ramp_s * 1000UL; // seconds → ms
 }
 
 void Motor::setTargetSpeed(int speed)
@@ -103,7 +103,7 @@ void Motor::update()
     }
 
     int currentSpeed;
-    if (duration < 2 * rampTime)
+    if (duration < 2 * rampTime_ms)
     {
         // TRIANGLE PROFILE aka its not long enough, ill explain later please remind me
         unsigned long half = duration / 2;
@@ -116,17 +116,17 @@ void Motor::update()
     else
     {
         // TRAPEZOID PROFILE
-        if (elapsed < rampTime)
+        if (elapsed < rampTime_ms)
         {
-            currentSpeed = map(elapsed, 0, rampTime, 0, this->motorTargetSpeed);
+            currentSpeed = map(elapsed, 0, rampTime_ms, 0, this->motorTargetSpeed);
         }
-        else if (elapsed < duration - rampTime)
+        else if (elapsed < duration - rampTime_ms)
         {
             currentSpeed = this->motorTargetSpeed;
         }
         else
         {
-            currentSpeed = map(elapsed, duration - rampTime, duration, this->motorTargetSpeed, 0);
+            currentSpeed = map(elapsed, duration - rampTime_ms, duration, this->motorTargetSpeed, 0);
         }
     }
 

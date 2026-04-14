@@ -13,21 +13,21 @@ class Motor
 
     unsigned long startTime;
     unsigned int duration;
-    unsigned int rampTime;
+    unsigned int rampTime_ms;
     public:
         Motor(){}
         Motor(int p1, int p2, int enable, int speed)
         : pin1(p1), pin2(p2), enablePin(enable), motorSpeed(speed)
         {
             motorTargetSpeed = 75;
-            rampTime = 300;
+            rampTime_ms = 300;
         }
         void forward();
         void backward();
         void stop();
 
         void setTargetSpeed(int speed);
-        void setRampTime(unsigned int duration_ms);
+        void setrampTime_ms(unsigned int duration_ms);
         void startMove(unsigned int duration_ms);
         void applySpeed(int speed);
         void update();
