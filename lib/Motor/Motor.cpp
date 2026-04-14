@@ -1,6 +1,9 @@
 #include <Arduino.h>
 #include <ftb.h>
 #include <Motor.h>
+#include <ESP32Servo.h>
+
+#define SERVO_PIN 17
 
 RobotMovement robotMovement;
 Motor *motors[4];
@@ -67,6 +70,11 @@ void RobotMovement::motorsInit()
     motors[1] = &robotMovement.motorB;
     motors[2] = &robotMovement.motorC;
     motors[3] = &robotMovement.motorD;
+}
+
+void RobotMovement::servoInit()
+{
+    robotMovement.servo.attach(SERVO_PIN);
 }
 
 void RobotMovement::moveX(int speed)

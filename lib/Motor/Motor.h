@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <ftb.h>
+#include <ESP32Servo.h>
 class Motor
 {
     int pin1;
@@ -25,6 +26,7 @@ class RobotMovement
         Motor motorB;
         Motor motorC;
         Motor motorD;
+        Servo servo;
         RobotMovement()
         {
             motorA = Motor(9, 10, 8, 50);
@@ -33,6 +35,7 @@ class RobotMovement
             motorD = Motor(3, 4, 2, 50);
         }
         void motorsInit();
+        void servoInit();
         int speed = 100;
         void moveX(int speed);
         void moveY(int speed);
