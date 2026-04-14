@@ -23,9 +23,9 @@ namespace SerialDecoder {
 
     enum class motorOpcode : uint8_t
     {
-        move = 0x00,
-        setSpeed = 0x01,
-        stop = 0x02
+        setTargetSpeed = 0x00,
+        setRampTime = 0x01,
+        startMove = 0x02,
     };
 
     enum class servoOpcode : uint8_t

@@ -7,16 +7,30 @@ class Motor
     int pin2;
     int enablePin;
     int motorSpeed;
+    int motorTargetSpeed;
+
+    bool isMoving;
+
+    unsigned long startTime;
+    unsigned int duration;
+    unsigned int rampTime;
     public:
         Motor(){}
         Motor(int p1, int p2, int enable, int speed)
         : pin1(p1), pin2(p2), enablePin(enable), motorSpeed(speed)
-        {}
+        {
+            motorTargetSpeed = 100;
+            rampTime = 300;
+        }
         void forward();
         void backward();
-        void setSpeed(int speed);
-        void move(int speed);
         void stop();
+
+        void setTargetSpeed(int speed);
+        void setRampTime(unsigned int duration_ms);
+        void startMove(unsigned int duration_ms);
+        void applySpeed(int speed);
+        void update();
 };
     
 class RobotMovement
@@ -37,17 +51,6 @@ class RobotMovement
         void motorsInit();
         void servoInit();
         int speed = 100;
-        void moveX(int speed);
-        void moveY(int speed);
-        void moveDiagonal13(int speed);
-        void moveDiagonal24(int speed);
-        // void moveX(int distance);
-        // void moveY(int distance);
-        // void moveDiagonal13(int distance);
-        // void moveDiagonal24(int distance);
-        void rotateFromWheel(int angle, int wheel); //Negative angle will be counter clockwise
-        void rotateBody(int angle); //Negative angle will be a counter clockwise
-        void rotateEdge(int angle, int edge); //The edge will be specified later for convenient usage
 };
 
 void motorA(int speed);

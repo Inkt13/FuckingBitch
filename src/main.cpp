@@ -18,4 +18,10 @@ void loop() {
     serialData = Serial.read();
     SerialDecoder::handleSerialData(serialData);
   }
+
+  for (int i = 0; i < 4; i++)
+    {
+        if (motors[i])
+            motors[i]->update();
+    }
 }

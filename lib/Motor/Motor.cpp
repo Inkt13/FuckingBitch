@@ -22,13 +22,61 @@ void Motor::backward()
     setPWM(enablePin,0,4000);
 }
 
-void Motor::setSpeed(int speed)
+
+void Motor::startMove(unsigned int duration_ms)
 {
-    Serial.print("This pin1 ");
-    Serial.print(this->pin1);
-    Serial.print(" changed speed to ");
-    Serial.print(speed);
-    this->motorSpeed = speed;
+    Serial.println("startMove is called");
+    int duration_s = duration_ms * 1000;
+    this->duration = duration_s;
+    this->startTime = millis();
+    this->isMoving = true;
+}
+
+void Motor::setRampTime(unsigned int rampTime)
+{
+    this->rampTime = rampTime;
+}
+
+void Motor::setTargetSpeed(int speed)
+{
+    if(speed > 0 && speed <= 100)
+    {
+        Serial.print("Positive speed of ");
+        Serial.println(this->motorTargetSpeed);
+        this->motorTargetSpeed = speed;
+    }
+    else if(speed > 100 && speed <= 200)
+    {
+        speed *= -1;
+        const int opposite_dir = 100;
+        Serial.print("Negative speed of ");
+        Serial.println(this->motorTargetSpeed);
+        this->motorTargetSpeed = speed + opposite_dir;
+    }
+    else if(speed == 0)
+    {
+        stop();
+    }
+}
+
+void Motor::applySpeed(int speed)
+{
+    if (speed > 0)
+    {
+        setPWM(pin1, 0, 0);
+        setPWM(pin2, 0, speed * 40);
+    }
+    else if (speed < 0)
+    {
+        setPWM(pin1, 0, (-speed) * 40);
+        setPWM(pin2, 0, 0);
+    }
+    else
+    {
+        stop();
+    }
+
+    setPWM(enablePin, 0, 4000);
 }
 
 void Motor::stop()
@@ -40,30 +88,49 @@ void Motor::stop()
     setPWM(enablePin,0,0);
 }
 
-void Motor::move(int speed)
+void Motor::update()
 {
-    Serial.print("This pin1 is moving:");
-    Serial.println(this->pin1);
-    if(speed > 0 && speed <= 100)
-    {
-        this->motorSpeed = speed;
-        this->forward();
-    }
-    else if(speed > 100)
-    {
-        const int opposite_dir = -100;
-        this->motorSpeed = speed + opposite_dir;
-        this->backward();
-    }
-    else if(speed == 0)
+    if(!this->isMoving) return;
+
+    unsigned long now = millis();
+    unsigned long elapsed = now - this->startTime;
+
+    if(elapsed >= duration)
     {
         stop();
+        this->isMoving = false;
+        return;
     }
-}
 
-int time(int distance, int speed)
-{
-    return speed / distance;
+    int currentSpeed;
+    if (duration < 2 * rampTime)
+    {
+        // TRIANGLE PROFILE aka its not long enough, ill explain later please remind me
+        unsigned long half = duration / 2;
+
+        if (elapsed < half)
+            currentSpeed = map(elapsed, 0, half, 0, this->motorTargetSpeed);
+        else
+            currentSpeed = map(elapsed, half, duration, this->motorTargetSpeed, 0);
+    }
+    else
+    {
+        // TRAPEZOID PROFILE
+        if (elapsed < rampTime)
+        {
+            currentSpeed = map(elapsed, 0, rampTime, 0, this->motorTargetSpeed);
+        }
+        else if (elapsed < duration - rampTime)
+        {
+            currentSpeed = this->motorTargetSpeed;
+        }
+        else
+        {
+            currentSpeed = map(elapsed, duration - rampTime, duration, this->motorTargetSpeed, 0);
+        }
+    }
+
+    Motor::applySpeed(currentSpeed);
 }
 
 void RobotMovement::motorsInit()
@@ -77,37 +144,4 @@ void RobotMovement::motorsInit()
 void RobotMovement::servoInit()
 {
     robotMovement.servo.attach(SERVO_PIN);
-}
-
-void RobotMovement::moveX(int speed)
-{
-    const int opposite_dir = -1;
-    motorA.move(speed);
-    motorB.move(speed * opposite_dir);
-    motorC.move(speed);
-    motorD.move(speed * opposite_dir);
-}
-
-void RobotMovement::moveY(int speed)
-{
-    motorA.move(speed);
-    motorB.move(speed);
-    motorC.move(speed);
-    motorD.move(speed);
-}
-
-void RobotMovement::moveDiagonal13(int speed)
-{
-    motorA.move(speed);
-    motorB.stop();
-    motorC.move(speed);
-    motorD.stop();
-}
-
-void RobotMovement::moveDiagonal24(int speed)
-{
-    motorA.stop();
-    motorB.move(speed);
-    motorC.stop();
-    motorD.move(speed);
 }

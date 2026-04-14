@@ -9,9 +9,6 @@ namespace SerialDecoder
 
     void handleSerialData(byte b)
     {
-        Serial.print("Byte: ");
-        Serial.println(b);
-
         if (b == START_BYTE)
         {
             index = 0;
@@ -24,21 +21,31 @@ namespace SerialDecoder
                 return;
             }
         }
+        Serial.print("Byte: ");
+        Serial.print(b);
+        Serial.print("\t");
+        Serial.print("Index: ");
+        Serial.println(index);
 
         SerialDecoder::buffer[SerialDecoder::index++] = b;
 
-        if (SerialDecoder::index < 5)
+        if(index == 5)
         {
-            SerialDecoder::buffer[SerialDecoder::index++] = b;
-        }
-        else
-        {
+            Serial.print("handlePacket: ");
+            Serial.print("Index[1]: ");
+            Serial.print(buffer[1]);
+            Serial.print("\t");
+            Serial.print("Index[2]: ");
+            Serial.print(buffer[2]);
+            Serial.print("\t");
+            Serial.print("Index[3]: ");
+            Serial.print(buffer[3]);
+            Serial.print("\t");
+            Serial.print("Index[4]: ");
+            Serial.println(buffer[4]);
+            handlePacket(buffer[1], buffer[2], buffer[3], buffer[4]);
             SerialDecoder::index = 0;
         }
-
-        SerialDecoder::index = 0;
-        Serial.println("handlePacket called");
-        handlePacket(buffer[1], buffer[2], buffer[3], buffer[4]);
     }
 
     void handlePacket(uint8_t typeId, uint8_t id, uint8_t opcode, uint8_t value)
@@ -84,14 +91,14 @@ namespace SerialDecoder
                 Serial.print(opcode);
                 Serial.println(":Invaild opcode bozo");
                 break;
-            case motorOpcode::move:
-                m->move(value);
+            case motorOpcode::setTargetSpeed:
+                m->setTargetSpeed(value);
                 break;
-            case motorOpcode::setSpeed:
-                m->setSpeed(value);
+            case motorOpcode::setRampTime:
+                m->setRampTime(value);
                 break;
-            case motorOpcode::stop:
-                m->stop();
+            case motorOpcode::startMove:
+                m->startMove(value);
                 break;
             }
             break;
