@@ -1,5 +1,5 @@
 #include <Arduino.h>
-//Package formatting [ motor_id | opcode | value ]
+//Package formatting [ start_byte | type_id | motor_id | opcode | value ]
 
 namespace SerialDecoder {
     enum class typeID : uint8_t 

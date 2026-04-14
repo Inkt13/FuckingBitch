@@ -3,20 +3,42 @@
 
 namespace SerialDecoder
 {
-    uint8_t buffer[4];
+    uint8_t buffer[5];
     int index = 0;
+    const uint8_t START_BYTE = 0xff;
 
     void handleSerialData(byte b)
     {
-        Serial.print("This byte is being read");
+        Serial.print("Byte: ");
         Serial.println(b);
+
+        if (b == START_BYTE)
+        {
+            index = 0;
+        }
+
+        if (SerialDecoder::index == 0)
+        {
+            if (b != START_BYTE)
+            {
+                return;
+            }
+        }
+
         SerialDecoder::buffer[SerialDecoder::index++] = b;
 
-        if (index < 4)
-            return;
-        index = 0;
+        if (SerialDecoder::index < 5)
+        {
+            SerialDecoder::buffer[SerialDecoder::index++] = b;
+        }
+        else
+        {
+            SerialDecoder::index = 0;
+        }
+
+        SerialDecoder::index = 0;
         Serial.println("handlePacket called");
-        handlePacket(buffer[0], buffer[1], buffer[2], buffer[3]);
+        handlePacket(buffer[1], buffer[2], buffer[3], buffer[4]);
     }
 
     void handlePacket(uint8_t typeId, uint8_t id, uint8_t opcode, uint8_t value)
