@@ -90,7 +90,7 @@ namespace SerialDecoder
             case motorOpcode::setTargetSpeed:
                 m->setTargetSpeed(value);
                 break;
-            case motorOpcode::setrampTime_ms:
+            case motorOpcode::setRampTime_ms:
                 m->setrampTime_ms(value);
                 break;
             case motorOpcode::startMove:
