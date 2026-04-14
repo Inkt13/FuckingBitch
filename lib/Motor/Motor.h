@@ -12,8 +12,8 @@ class Motor
     bool isMoving;
 
     unsigned long startTime;
-    unsigned int duration;
-    unsigned int rampTime_ms;
+    unsigned int duration; //its in desiseconds
+    unsigned int rampTime_ms; //its in desiseconds
     public:
         Motor(){}
         Motor(int p1, int p2, int enable, int speed)

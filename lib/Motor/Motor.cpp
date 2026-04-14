@@ -27,31 +27,32 @@ void Motor::startMove(unsigned int duration_s)
 {
     Serial.println("startMove is called");
 
-    this->duration = duration_s * 1000UL; // seconds → ms
+    //ds = desiseconds
+    this->duration = duration_s * 100UL; // seconds → ds
     this->startTime = millis();
     this->isMoving = true;
 }
 
 void Motor::setrampTime_ms(unsigned int ramp_s)
 {
-    this->rampTime_ms = ramp_s * 1000UL; // seconds → ms
+    this->rampTime_ms = ramp_s * 100UL; // seconds → ds
 }
 
 void Motor::setTargetSpeed(int speed)
 {
     if(speed > 0 && speed <= 100)
     {
+        this->motorTargetSpeed = speed;
         Serial.print("Positive speed of ");
         Serial.println(this->motorTargetSpeed);
-        this->motorTargetSpeed = speed;
     }
     else if(speed > 100 && speed <= 200)
     {
         speed *= -1;
         const int opposite_dir = 100;
+        this->motorTargetSpeed = speed + opposite_dir;
         Serial.print("Negative speed of ");
         Serial.println(this->motorTargetSpeed);
-        this->motorTargetSpeed = speed + opposite_dir;
     }
     else if(speed == 0)
     {
