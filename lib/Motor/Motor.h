@@ -19,7 +19,7 @@ class Motor
         Motor(int p1, int p2, int enable, int speed)
         : pin1(p1), pin2(p2), enablePin(enable), motorSpeed(speed)
         {
-            motorTargetSpeed = 100;
+            motorTargetSpeed = 75;
             rampTime = 300;
         }
         void forward();

@@ -23,18 +23,18 @@ void Motor::backward()
 }
 
 
-void Motor::startMove(unsigned int duration_ms)
+void Motor::startMove(unsigned int duration_s)
 {
     Serial.println("startMove is called");
-    int duration_s = duration_ms * 1000;
-    this->duration = duration_s;
+
+    this->duration = duration_s * 1000UL; // seconds → ms
     this->startTime = millis();
     this->isMoving = true;
 }
 
-void Motor::setRampTime(unsigned int rampTime)
+void Motor::setRampTime(unsigned int ramp_s)
 {
-    this->rampTime = rampTime;
+    this->rampTime = ramp_s * 1000UL; // seconds → ms
 }
 
 void Motor::setTargetSpeed(int speed)
