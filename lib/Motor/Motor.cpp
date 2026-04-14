@@ -44,16 +44,18 @@ void Motor::move(int speed)
 {
     Serial.print("This pin1 is moving:");
     Serial.println(this->pin1);
-    if(speed > 0)
+    if(speed > 0 && speed <= 100)
     {
+        this->motorSpeed = speed;
         this->forward();
     }
-    else if(speed < 0)
+    else if(speed > 100)
     {
-        const int opposite_dir = -1;
+        const int opposite_dir = -100;
+        this->motorSpeed = speed + opposite_dir;
         this->backward();
     }
-    else
+    else if(speed == 0)
     {
         stop();
     }
