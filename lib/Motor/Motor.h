@@ -50,15 +50,7 @@ class RobotMovement
         }
         void motorsInit();
         void servoInit();
-        int speed = 100;
 };
-
-void motorA(int speed);
-void motorB(int speed);
-void motorC(int speed);
-void motorD(int speed);
-
-int time(int distance, RobotMovement& speed);
 
 extern RobotMovement robotMovement;
 extern Motor *motors[4];

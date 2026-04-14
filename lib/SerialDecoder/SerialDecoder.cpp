@@ -31,18 +31,14 @@ namespace SerialDecoder
 
         if(index == 5)
         {
-            Serial.print("handlePacket: ");
-            Serial.print("Index[1]: ");
-            Serial.print(buffer[1]);
+            Serial.print("handlePacket: "); 
+            Serial.print("Index[1]: "); Serial.print(buffer[1]); 
             Serial.print("\t");
-            Serial.print("Index[2]: ");
-            Serial.print(buffer[2]);
+            Serial.print("Index[2]: "); Serial.print(buffer[2]);
             Serial.print("\t");
-            Serial.print("Index[3]: ");
-            Serial.print(buffer[3]);
+            Serial.print("Index[3]: ");Serial.print(buffer[3]);
             Serial.print("\t");
-            Serial.print("Index[4]: ");
-            Serial.println(buffer[4]);
+            Serial.print("Index[4]: ");Serial.println(buffer[4]);
             handlePacket(buffer[1], buffer[2], buffer[3], buffer[4]);
             SerialDecoder::index = 0;
         }
