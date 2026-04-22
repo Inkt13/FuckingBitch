@@ -48,6 +48,7 @@ class RobotMovement
             motorB = Motor(12, 11, 13, 50);
             motorC = Motor(6, 5, 7, 50);
             motorD = Motor(3, 4, 2, 50);
+            servoCurrentAngle = 0;
         }
         void motorsInit();
         void servoInit();
