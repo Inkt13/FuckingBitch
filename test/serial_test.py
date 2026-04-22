@@ -11,7 +11,7 @@ while True:
         break
 
     # send
-    ser.write(bytes([eval(cmd)]))
+    ser.write(bytes([255,1,0,0,eval(cmd)]))
 
     # read response
     time.sleep(0.03)  # give Arduino time to respond

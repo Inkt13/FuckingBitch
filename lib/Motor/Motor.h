@@ -36,6 +36,7 @@ class Motor
 class RobotMovement
 {
     public:
+        int servoCurrentAngle;
         Motor motorA;
         Motor motorB;
         Motor motorC;
@@ -50,6 +51,7 @@ class RobotMovement
         }
         void motorsInit();
         void servoInit();
+        void servoWriteControlled(int angle, int delayTime);
 };
 
 extern RobotMovement robotMovement;

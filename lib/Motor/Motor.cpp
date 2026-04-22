@@ -10,24 +10,23 @@ Motor *motors[4];
 
 void Motor::forward()
 {
-    setPWM(pin1,0,0);
-    setPWM(pin2,0,this->motorSpeed * 40);
-    setPWM(enablePin,0,4000);
+    setPWM(pin1, 0, 0);
+    setPWM(pin2, 0, this->motorSpeed * 40);
+    setPWM(enablePin, 0, 4000);
 }
 
 void Motor::backward()
 {
-    setPWM(pin1,0,this->motorSpeed * 40);
-    setPWM(pin2,0,0);
-    setPWM(enablePin,0,4000);
+    setPWM(pin1, 0, this->motorSpeed * 40);
+    setPWM(pin2, 0, 0);
+    setPWM(enablePin, 0, 4000);
 }
-
 
 void Motor::startMove(unsigned int duration_s)
 {
     Serial.println("startMove is called");
 
-    //ds = desiseconds
+    // ds = desiseconds
     this->duration = duration_s * 100UL; // seconds → ds
     this->startTime = millis();
     this->isMoving = true;
@@ -40,13 +39,13 @@ void Motor::setrampTime_ms(unsigned int ramp_s)
 
 void Motor::setTargetSpeed(int speed)
 {
-    if(speed > 0 && speed <= 100)
+    if (speed > 0 && speed <= 100)
     {
         this->motorTargetSpeed = speed;
         Serial.print("Positive speed of ");
         Serial.println(this->motorTargetSpeed);
     }
-    else if(speed > 100 && speed <= 200)
+    else if (speed > 100 && speed <= 200)
     {
         speed *= -1;
         const int opposite_dir = 100;
@@ -54,7 +53,7 @@ void Motor::setTargetSpeed(int speed)
         Serial.print("Negative speed of ");
         Serial.println(this->motorTargetSpeed);
     }
-    else if(speed == 0)
+    else if (speed == 0)
     {
         stop();
     }
@@ -80,23 +79,52 @@ void Motor::applySpeed(int speed)
     setPWM(enablePin, 0, 4000);
 }
 
+void RobotMovement::servoWriteControlled(int targetAngle, int delayTime = 1)
+{
+    int step = 2;
+    int currentAngle = robotMovement.servoCurrentAngle;
+    
+    if (currentAngle == targetAngle) return;
+
+    if (targetAngle > currentAngle)
+    {
+        for (int i = currentAngle; i <= targetAngle;i += step)
+        {
+            robotMovement.servo.write(i);
+            delay(delayTime * 10);//*10 makes its so from millisecond to centiseconds
+        }
+    }
+    else
+    {
+        for (int i = currentAngle; i >= targetAngle;i -= step)
+        {
+            robotMovement.servo.write(i);
+            delay(delayTime * 10);//*10 makes its so from millisecond to centiseconds
+        }
+    }
+
+    robotMovement.servoCurrentAngle = targetAngle;
+    robotMovement.servo.write(targetAngle);
+}
+
 void Motor::stop()
 {
     Serial.print("This pin1 is stopping:");
     Serial.println(this->pin1);
-    setPWM(pin1,0,0);
-    setPWM(pin2,0,0);
-    setPWM(enablePin,0,0);
+    setPWM(pin1, 0, 0);
+    setPWM(pin2, 0, 0);
+    setPWM(enablePin, 0, 0);
 }
 
 void Motor::update()
 {
-    if(!this->isMoving) return;
+    if (!this->isMoving)
+        return;
 
     unsigned long now = millis();
     unsigned long elapsed = now - this->startTime;
 
-    if(elapsed >= duration)
+    if (elapsed >= duration)
     {
         stop();
         this->isMoving = false;

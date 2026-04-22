@@ -53,12 +53,6 @@ namespace SerialDecoder
             Serial.println(":Invaild typeID bozo");
             break;
         case typeID::servo:
-            if (id != 0)
-            {
-                Serial.print(id);
-                Serial.println(":Invaild ID bozo");
-                return;
-            }
             switch ((servoOpcode)opcode)
             {
             default:
@@ -66,7 +60,7 @@ namespace SerialDecoder
                 Serial.println(":Invaild opcode bozo");
                 break;
             case servoOpcode::setAngle:
-                robotMovement.servo.write(value);
+                robotMovement.servoWriteControlled(id, value);
                 break;
             }
             break;
